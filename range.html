@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+
+        <title>Indian Atlas &mdash; Mountain Ranges</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    </head>
+    <body>
+        <div class="container3">
+            <header class="header">
+                <img src="img/logo.png" alt="trillo logo" class="logo">
+                <h1  class="overview__heading">
+                    INDIAN ATLAS
+                </h1>
+                <form action="#" class="search">
+                    <input type="text" class="search__input" placeholder="help">
+                    <button class="search__button">
+                        <svg class="search__icon">
+                            <use xlink:href="img/sprite.svg#icon-magnifying-glass"></use>
+                        </svg>
+                    </button>
+                </form>
+            </header>
+
+
+            <div class="content">
+                <nav class="sidebar">
+                    <ul class="side-nav">
+                        <li class="side-nav__item ">
+                            <a href="index.html" class="side-nav__link">
+                                <svg class="side-nav__icon">
+                                    <use xlink:href="img/sprite.svg#icon-home"></use>
+                                </svg>
+                                <span>HOME</span>
+                            </a>
+                        </li>
+                        <li class="side-nav__item">
+                            <a href="cultures.html" class="side-nav__link">
+                                <svg class="side-nav__icon">
+                                    <use xlink:href="img/sprite.svg#icon-chevron-thin-right"></use>
+                                </svg>
+                                <span>CULTURES</span>
+                            </a>
+                        </li>
+                        <li class="side-nav__item">
+                            <a href="map.html" class="side-nav__link">
+                                <svg class="side-nav__icon">
+                                    <use xlink:href="img/sprite.svg#icon-chevron-thin-right"></use>
+                                </svg>
+                                <span>MONUMENTS</span>
+                            </a>
+                        </li>
+                        <li class="side-nav__item side-nav__item--active">
+                            <a href="range.html" class="side-nav__link">
+                                <svg class="side-nav__icon">
+                                    <use xlink:href="img/sprite.svg#icon-chevron-thin-right"></use>
+                                </svg>
+                                <span>MOUNTAIN RANGES</span>
+                            </a>
+                        </li>
+                        <li class="side-nav__item" >
+                            <a href="cities.html" class="side-nav__link">
+                                <svg class="side-nav__icon">
+                                    <use xlink:href="img/sprite.svg#icon-chevron-thin-right"></use>
+                                </svg>
+                                <span>Historic Cities  </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav__item " >
+                            <a href="rivers.html" class="side-nav__link">
+                                <svg class="side-nav__icon">
+                                    <use xlink:href="img/sprite.svg#icon-chevron-thin-right"></use>
+                                </svg>
+                                <span>Rivers</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                </main>
+
+                <header class="text-center">
+                    <h1 class="text-top">Explore India's Mountain Ranges</h1>
+                </header>
+            
+                <div id="map"></div>
+            
+                <!-- Bootstrap Modal -->
+                <div class="modal fade" id="mountainModal" tabindex="-1" role="dialog" aria-labelledby="mountainModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="mountainModalLabel">Mountain Range Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img id="mountain-image" src="" alt="Mountain Range Image">
+                                <h4 id="mountain-name"></h4>
+                                <p id="mountain-description"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                <script>
+                    // Initialize the map
+                    var map = L.map('map').setView([20.5937, 78.9629], 5); // Center of India
+            
+                    // Restrict map view to India
+                    var bounds = [[6.462, 68.176], [37.314, 97.394]]; // Rough bounding box for India
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+            
+                    // Mountain ranges data
+                    const mountains = {
+                        'himalayas': {
+                            name: 'Himalayas',
+                            image: 'https://i.redd.it/lzm6coywrp321.jpg',
+                            description: 'The Himalayas is a mountain range in Asia, separating the plains of the Indian subcontinent from the Tibetan Plateau. The range has some of the planet\'s highest peaks, including Mount Everest, the highest point on Earth. It stretches across five countries: Bhutan, China, India, Nepal, and Pakistan.',
+                            lat: 30.4428,
+                            lng: 80.2100
+                        },
+                        'western-ghats': {
+                            name: 'Western Ghats',
+                            image: 'https://i.redd.it/1m96nupbsgw11.jpg',
+                            description: 'The Western Ghats, also known as the Sahyadri Hills, are a mountain range that runs parallel to the western coast of the Indian peninsula. They are a UNESCO World Heritage Site and are known for their rich biodiversity, including many endemic species of flora and fauna.',
+                            lat: 15.6989,
+                            lng: 75.3500
+                        },
+                        'eastern-ghats': {
+                            name: 'Eastern Ghats',
+                            image: 'https://farm4.staticflickr.com/3430/3724393316_8a42c98897_b.jpg',
+                            description: 'The Eastern Ghats are a range of mountains along the eastern coast of India. They run parallel to the eastern coast of the Indian peninsula and are less continuous than the Western Ghats. The Eastern Ghats are known for their scenic beauty and biodiversity.',
+                            lat: 17.6066,
+                            lng: 82.5276
+                        },
+                        'aravalli-range': {
+                            name: 'Aravalli Range',
+                            image: 'https://static.toiimg.com/thumb/msid-96195834,width-748,height-499,resizemode=4,imgsize-172838/In-pictures-Wonders-of-Indias-Aravalli-mountain-range.jpg',
+                            description: 'The Aravalli Range is a mountain range in western India, running approximately 800 km from the north to the south. It is one of the oldest mountain ranges in the world and plays a crucial role in the local climate and ecology.',
+                            lat: 27.1104,
+                            lng: 75.5306
+                        },
+                        'vindhya-range': {
+                            name: 'Vindhya Range',
+                            image: 'https://tfipost.com/wp-content/uploads/2022/11/Vindhya_range_waterfall.jpg',
+                            description: 'The Vindhya Range is a complex of mountain ranges in central India. It separates the northern and southern parts of India and is known for its rich history and cultural significance.',
+                            lat: 23.0974,
+                            lng: 81.6030
+                        },
+                        'satpura-range': {
+                            name: 'Satpura Range',
+                            image: 'https://greenverz.com/wp-content/uploads/2023/04/Greenverz_Satpura_001.png',
+                            description: 'The Satpura Range is a series of mountain ranges in central India, running parallel to the Vindhya Range. It is known for its dense forests, wildlife sanctuaries, and rich biodiversity.',
+                            lat: 22.3717,
+                            lng: 78.5474
+                        },
+                        'kumaon-range': {
+                            name: 'Kumaon Range',
+                            image: 'https://live.staticflickr.com/7538/15910054141_0d3c074f1c_b.jpg',
+                            description: 'The Kumaon Range is part of the western Himalayas in the Indian state of Uttarakhand. It is known for its picturesque landscapes, dense forests, and high mountain peaks.',
+                            lat: 29.5517,
+                            lng: 80.2184
+                        },
+                        'zanskar-range': {
+                            name: 'Zanskar Range',
+                            image: 'https://c8.alamy.com/comp/CTAFXP/valley-near-village-wanla-zanskar-range-traverse-zanskar-range-zanskar-CTAFXP.jpg',
+                            description: 'The Zanskar Range is a mountain range located in the northern Indian state of Ladakh. It is known for its rugged terrain, high peaks, and remote location.',
+                            lat: 33.4564,
+                            lng: 77.1350
+                        },
+                        'ladakh-range': {
+                            name: 'Ladakh Range',
+                            image: 'https://static2.tripoto.com/media/transfer/img/OgData/1459842119_1459534419_1.jpg',
+                            description: 'The Ladakh Range is a mountain range in the northern Indian state of Ladakh. It lies parallel to the Indus River and is known for its stark beauty and high-altitude environment.',
+                            lat: 34.1540,
+                            lng: 77.5000
+                        },
+                        'kailash-range': {
+                            name: 'Kailash Range',
+                            image: 'https://wallpaperaccess.com/full/2088878.jpg',
+                            description: 'The Kailash Range is located in the Tibet Autonomous Region of China and is considered a sacred mountain range in Hinduism and Buddhism. Mount Kailash, a peak in this range, is a pilgrimage site for many devotees.',
+                            lat: 30.3532,
+                            lng: 81.3133
+                        }
+                    };
+            
+                    // Add markers to the map
+                    for (const [key, mountain] of Object.entries(mountains)) {
+                        const marker = L.divIcon({
+                            className: 'custom-icon',
+                            html: `<i class="fas fa-caret-up" style="color: #fff;"></i>`,
+                            iconSize: [50, 50]
+                        });
+            
+                        L.marker([mountain.lat, mountain.lng], { icon: marker })
+                            .addTo(map)
+                            .on('click', function () {
+                                // Set modal content
+                                document.getElementById('mountain-name').innerText = mountain.name;
+                                document.getElementById('mountain-description').innerText = mountain.description;
+                                document.getElementById('mountain-image').src = mountain.image;
+            
+                                // Show the modal
+                                $('#mountainModal').modal('show');
+                            });
+                    }
+                </script>
+            
+
+            </div>
+        </div>
+    </body>
+</html>
+
+
+
